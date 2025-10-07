@@ -4,23 +4,24 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 
-# Load environment variables from .env (optional, but recommended)
+# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 
-# ✅ FIXED CORS (Allow requests from your frontend)
-CORS(app, origins="*", supports_credentials=True)
-# Once confirmed working, replace "*" with your domain:
-# CORS(app, origins=["https://aayush-devportfolio.vercel.app", "http://localhost:5173"], supports_credentials=True)
+# ✅ FIXED CORS: allow Vercel + localhost
+CORS(app, origins=[
+    "https://aayush-devportfolio.vercel.app",
+    "http://localhost:5173"
+], allow_headers=["Content-Type"], supports_credentials=True)
 
-# ✅ Mail setup
+# ✅ Mail configuration
 app.config.update(
     MAIL_SERVER="smtp.gmail.com",
     MAIL_PORT=587,
     MAIL_USE_TLS=True,
     MAIL_USERNAME=os.getenv("MAIL_USERNAME", "aayushtailor16@gmail.com"),
-    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD", "YOUR_APP_PASSWORD"),  # Use your Gmail App Password
+    MAIL_PASSWORD=os.getenv("MAIL_PASSWORD", "YOUR_APP_PASSWORD"),
     MAIL_DEFAULT_SENDER=os.getenv("MAIL_USERNAME", "aayushtailor16@gmail.com"),
 )
 
@@ -37,7 +38,7 @@ def contact():
     try:
         msg = Message(
             subject=f"New Contact from {name}",
-            recipients=["aayushtailor16@gmail.com"],  # your receiving email
+            recipients=["aayushtailor16@gmail.com"],
             body=f"From: {name}\nEmail: {email}\n\nMessage:\n{message}"
         )
         mail.send(msg)
