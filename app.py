@@ -4,7 +4,8 @@ from flask_mail import Mail, Message
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # Email configuration (use your Gmail here)
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -43,3 +44,4 @@ def home():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
+
